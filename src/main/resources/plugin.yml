@@ -1,0 +1,7 @@
+name: Bingo
+version: ${project.version}
+main: de.rexituz.bingo.main.Main
+commands:
+  start:
+    description: Skips the Countdown in the Lobby
+    usage: /start
