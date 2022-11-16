@@ -30,13 +30,12 @@ public class JoinEvent implements Listener {
         p.getInventory().setItem(0, plugin.getTeamGui().getTeamItem());
         p.setFoodLevel(20);
         p.setGameMode(GameMode.SURVIVAL);
-        if (!(new Location(Bukkit.getWorld("lobby"), 242.5, 53, 1348.5, -90, 0)).getChunk().isLoaded())
-        {
-            (new Location(Bukkit.getWorld("lobby"), 242.5, 53, 1348.5, -90, 0)).getChunk().load();
-        }
-        p.teleport(new Location(Bukkit.getWorld("lobby"), 242.5, 53, 1348.5, -90, 0));
+        p.setScoreboard(plugin.getLobbyScoreboard().getBoard());
 
-        e.setJoinMessage(Main.PREFIX + ChatColor.GRAY + "[" + ChatColor.GREEN + "+" + ChatColor.GRAY + "] " + ChatColor.GRAY + p.getName() + " [" +
+        Location spawnLoc = Bukkit.getWorld("world").getSpawnLocation();
+        p.teleport(new Location(Bukkit.getWorld("world"), spawnLoc.getBlockX() + .5, spawnLoc.getBlockY() + 51, spawnLoc.getBlockZ() + .5, -90, 0));
+
+        e.setJoinMessage(Main.PREFIX + ChatColor.GREEN + "+ " + ChatColor.GRAY + p.getName() + " [" +
                 ChatColor.GREEN + Bukkit.getOnlinePlayers().size() + ChatColor.GRAY + "/" + ChatColor.GREEN + LobbyState.MAX_PLAYERS + ChatColor.GRAY + "]");
 
         LobbyCountdown countdown = plugin.getLobbyCountdown();

@@ -10,13 +10,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class ItemBuilder {
-    public ItemStack getItem(String name, Material material, int i, Boolean hasLore, ArrayList<String> lore, Boolean enchanted, boolean hasData, int data){
+    public ItemStack getItem(String name, Material material, int i, Boolean hasLore, ArrayList<String> lore, Boolean enchanted, boolean hasData){
         ItemStack item;
-        if(hasData){
-            item = new ItemStack(material, i,(short) data);
-        } else {
-            item = new ItemStack(material, i);
-        }
+        item = new ItemStack(material, i);
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayName(name);
         if(hasLore)

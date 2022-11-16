@@ -3,6 +3,7 @@ package de.rexituz.bingo.teams;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.DyeColor;
+import org.bukkit.Material;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -17,10 +18,10 @@ public class TeamsDefinition {
         TeamsDelivery td3 = new TeamsDelivery(allFalse);
         TeamsDelivery td4 = new TeamsDelivery(allFalse);
 
-        teamRed = new Teams("Rot", ChatColor.RED, new ArrayList<String>(), td1, DyeColor.RED, Bukkit.createInventory(null, 9, "Team Inventar"));
-        teamBlue = new Teams("Blau", ChatColor.BLUE, new ArrayList<String>(), td2, DyeColor.BLUE, Bukkit.createInventory(null, 9, "Team Inventar"));
-        teamGreen = new Teams("Grün", ChatColor.GREEN, new ArrayList<String>(), td3, DyeColor.LIME, Bukkit.createInventory(null, 9, "Team Inventar"));
-        teamYellow = new Teams("Gelb", ChatColor.YELLOW, new ArrayList<String>(), td4, DyeColor.YELLOW, Bukkit.createInventory(null, 9, "Team Inventar"));
+        teamRed = new Teams("Rot", ChatColor.RED, new ArrayList<String>(), td1, Material.RED_WOOL, Bukkit.createInventory(null, 9, "Team Inventar"));
+        teamBlue = new Teams("Blau", ChatColor.BLUE, new ArrayList<String>(), td2, Material.BLUE_WOOL, Bukkit.createInventory(null, 9, "Team Inventar"));
+        teamGreen = new Teams("Grün", ChatColor.GREEN, new ArrayList<String>(), td3, Material.LIME_WOOL, Bukkit.createInventory(null, 9, "Team Inventar"));
+        teamYellow = new Teams("Gelb", ChatColor.YELLOW, new ArrayList<String>(), td4, Material.YELLOW_WOOL, Bukkit.createInventory(null, 9, "Team Inventar"));
     }
 
     static Teams teamRed;

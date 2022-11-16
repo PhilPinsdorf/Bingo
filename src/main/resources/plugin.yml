@@ -1,6 +1,7 @@
 name: Bingo
 version: ${project.version}
 main: de.rexituz.bingo.main.Main
+api-version: 1.13
 commands:
   start:
     description: Skips the Countdown in the Lobby

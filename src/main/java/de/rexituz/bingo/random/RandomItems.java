@@ -1,19 +1,48 @@
 package de.rexituz.bingo.random;
 
+import de.rexituz.bingo.config.ConfigFile;
 import de.rexituz.bingo.main.Main;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Random;
 
 public class RandomItems {
+    Main plugin = Main.getPlugin();
+    ConfigFile configFile = plugin.getConfigFile();
     ArrayList<Material> finalMaterials = new ArrayList<Material>();
-    ArrayList<Material> easyMaterials = new ArrayList<Material>(Arrays.asList(Material.DIRT, Material.STICK, Material.COAL, Material.PAINTING, Material.PAPER, Material.BOWL, Material.FISHING_ROD, Material.WOOD, Material.WOOD_AXE, Material.BUCKET, Material.GLASS, Material.GOLD_NUGGET, Material.EGG, Material.APPLE, Material.FEATHER, Material.PORK, Material.WOOL, Material.STICK, Material.GLASS, Material.WHEAT, Material.SUGAR_CANE));
-    ArrayList<Material> mediumMaterials = new ArrayList<Material>(Arrays.asList(Material.IRON_AXE, Material.IRON_HOE, Material.BOW, Material.FLINT_AND_STEEL, Material.FLOWER_POT_ITEM, Material.ARROW, Material.BREAD, Material.BOOK_AND_QUILL, Material.CAULDRON_ITEM, Material.FERMENTED_SPIDER_EYE));
-    ArrayList<Material> hardMaterials = new ArrayList<Material>(Arrays.asList(Material.GOLD_INGOT, Material.REDSTONE, Material.HOPPER, Material.LAVA_BUCKET, Material.BOOKSHELF));
+    ArrayList<Material> easyMaterials;
+    ArrayList<Material> mediumMaterials;
+    ArrayList<Material> hardMaterials;
     boolean alreadyRandomized = false;
+
+    public RandomItems(){
+        easyMaterials = new ArrayList<>();
+        mediumMaterials = new ArrayList<>();
+        hardMaterials = new ArrayList<>();
+
+        for(String s : configFile.getStringListFile("plugins/Bingo/config.yml", "Items.Easy")){
+            if(Material.getMaterial(s) != null){
+                Material mat = Material.getMaterial(s);
+                easyMaterials.add(mat);
+            }
+        }
+
+        for(String s : configFile.getStringListFile("plugins/Bingo/config.yml", "Items.Medium")){
+            if(Material.getMaterial(s) != null){
+                Material mat = Material.getMaterial(s);
+                mediumMaterials.add(mat);
+            }
+        }
+
+        for(String s : configFile.getStringListFile("plugins/Bingo/config.yml", "Items.Hard")){
+            if(Material.getMaterial(s) != null){
+                Material mat = Material.getMaterial(s);
+                hardMaterials.add(mat);
+            }
+        }
+    }
 
     public void randomizeItems(){
         if(!alreadyRandomized){
@@ -23,15 +52,15 @@ public class RandomItems {
                     Material material;
                     int rnd;
                     switch (i){
-                        case 0: case 1: case 2: case 3: case 4: case 5:
+                        case 0: case 1: case 2: case 3:
                             rnd = new Random().nextInt(easyMaterials.size());
                             material = easyMaterials.get(rnd);
                             break;
-                        case 6: case 7:
+                        case 4: case 5: case 6:
                             rnd = new Random().nextInt(mediumMaterials.size());
                             material = mediumMaterials.get(rnd);
                             break;
-                        case 8:
+                        case 7: case 8:
                             rnd = new Random().nextInt(hardMaterials.size());
                             material = hardMaterials.get(rnd);
                             break;
@@ -46,7 +75,6 @@ public class RandomItems {
                 }
             }
             alreadyRandomized = true;
-            Bukkit.broadcastMessage(finalMaterials + "");
         } else {
             System.out.println(Main.PREFIX + "Materials wurden schon gesetzt!");
         }

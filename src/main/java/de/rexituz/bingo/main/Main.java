@@ -1,29 +1,28 @@
 package de.rexituz.bingo.main;
 
 import de.rexituz.bingo.commands.StartCommand;
+import de.rexituz.bingo.config.ConfigFile;
+import de.rexituz.bingo.countdowns.EndingCountdown;
 import de.rexituz.bingo.countdowns.InGameCountdown;
 import de.rexituz.bingo.countdowns.LobbyCountdown;
 import de.rexituz.bingo.events.JoinEvent;
 import de.rexituz.bingo.events.LittleListeners;
+import de.rexituz.bingo.events.QuitListener;
 import de.rexituz.bingo.gamestates.GameStateManager;
 import de.rexituz.bingo.gamestates.GameStates;
 import de.rexituz.bingo.gui.IngameGui;
 import de.rexituz.bingo.gui.IngameItem;
 import de.rexituz.bingo.gui.TeamGui;
 import de.rexituz.bingo.random.RandomItems;
+import de.rexituz.bingo.scoreboards.EndingScoreboard;
+import de.rexituz.bingo.scoreboards.InGameScoreboard;
+import de.rexituz.bingo.scoreboards.LobbyScoreboard;
 import de.rexituz.bingo.teams.Teams;
 import de.rexituz.bingo.teams.TeamsDefinition;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.World;
-import org.bukkit.WorldCreator;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitRunnable;
-
-import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
 
 public final class Main extends JavaPlugin {
@@ -36,9 +35,14 @@ public final class Main extends JavaPlugin {
     TeamGui teamGui;
     LobbyCountdown lobbyCountdown;
     InGameCountdown inGameCountdown;
+    EndingCountdown endingCountdown;
     GameStateManager gameStateManager;
+    LobbyScoreboard lobbyScoreboard;
+    InGameScoreboard inGameScoreboard;
+    EndingScoreboard endingScoreboard;
     HashMap<Player, Teams> teamAssignment = new HashMap<Player, Teams>();
     Teams winningTeam;
+    ConfigFile configFile;
 
     @Override
     public void onEnable() {
@@ -47,12 +51,13 @@ public final class Main extends JavaPlugin {
         commandRegistration();
         getServer().createWorld(new WorldCreator("lobby"));
         gamestateRegistration();
+        setupGamerules();
         getRandomItems().randomizeItems();
     }
 
     @Override
     public void onDisable() {
-        reset(Bukkit.getWorld("world"));
+
     }
 
     private void registerEvents(){
@@ -62,6 +67,7 @@ public final class Main extends JavaPlugin {
         pluginManager.registerEvents(new JoinEvent(), this);
         pluginManager.registerEvents(new TeamGui(), this);
         pluginManager.registerEvents(new LittleListeners(), this);
+        pluginManager.registerEvents(new QuitListener(), this);
     }
 
     private void commandRegistration() {
@@ -72,43 +78,13 @@ public final class Main extends JavaPlugin {
         getGameStateManager().setGameState(GameStates.LOBBY_STATE);
     }
 
-    public void reset(World world) { // Please modify to your needs
-        Bukkit.getServer().unloadWorld(world, false); // False = Not Save
-        final File worldFolder = new File(world.getName()); // World folder name
-        deleteFolder(worldFolder); // Delete old folder
-        recursiveDelete(worldFolder);
-        //final WorldCreator w = new WorldCreator(world.getName()); // This starts the world load
-    }
-
-    private void deleteFolder(File folder) {
-        File[] files = folder.listFiles();
-        if(files != null) {
-            for(File file : files) {
-                if(file.isDirectory()) {
-                    deleteFolder(file);
-                } else {
-                    file.delete();
-                }
-            }
-        }
-        folder.delete();
-    }
-
-    public static void recursiveDelete(File file) {
-        //to end the recursive loop
-        if (!file.exists())
-            return;
-
-        //if directory, go inside and call recursively
-        if (file.isDirectory()) {
-            for (File f : file.listFiles()) {
-                //call recursively
-                recursiveDelete(f);
-            }
-        }
-        //call delete to delete files and empty directory
-        file.delete();
-        System.out.println("Deleted file/folder: "+file.getAbsolutePath());
+    private void setupGamerules(){
+        World world = Bukkit.getWorld("world");
+        world.setTime(1000);
+        world.setGameRule(GameRule.DO_DAYLIGHT_CYCLE, false);
+        world.setGameRule(GameRule.DO_WEATHER_CYCLE, false);
+        world.setStorm(false);
+        world.setDifficulty(Difficulty.PEACEFUL);
     }
 
     public static Main getPlugin() {
@@ -150,6 +126,34 @@ public final class Main extends JavaPlugin {
         return lobbyCountdown;
     }
 
+    public EndingCountdown getEndingCountdown() {
+        if(endingCountdown == null) {
+            endingCountdown = new EndingCountdown();
+        }
+        return endingCountdown;
+    }
+
+    public LobbyScoreboard getLobbyScoreboard() {
+        if(lobbyScoreboard == null){
+            lobbyScoreboard = new LobbyScoreboard();
+        }
+        return lobbyScoreboard;
+    }
+
+    public InGameScoreboard getInGameScoreboard() {
+        if(inGameScoreboard == null){
+            inGameScoreboard = new InGameScoreboard();
+        }
+        return inGameScoreboard;
+    }
+
+    public EndingScoreboard getEndingScoreboard() {
+        if(endingScoreboard == null){
+            endingScoreboard = new EndingScoreboard();
+        }
+        return endingScoreboard;
+    }
+
     public TeamGui getTeamGui() {
         if(teamGui == null){
             teamGui = new TeamGui();
@@ -185,5 +189,12 @@ public final class Main extends JavaPlugin {
 
     public void setWinningTeam(Teams winningTeam) {
         this.winningTeam = winningTeam;
+    }
+
+    public ConfigFile getConfigFile() {
+        if(configFile == null){
+            configFile = new ConfigFile();
+        }
+        return configFile;
     }
 }

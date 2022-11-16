@@ -3,9 +3,7 @@ package de.rexituz.bingo.countdowns;
 import de.rexituz.bingo.gamestates.GameStates;
 import de.rexituz.bingo.gamestates.LobbyState;
 import de.rexituz.bingo.main.Main;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Sound;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
 
 public class LobbyCountdown extends Countdown
@@ -53,41 +51,68 @@ public class LobbyCountdown extends Countdown
 						
 						switch(seconds) 
 						{
-						case 60: case 30: case 20: case 10: case 4: case 3: case 2:
+						case 60: case 30: case 20: case 10:
 							for(Player player : Bukkit.getOnlinePlayers())
 							{
-								player.playSound(player.getLocation(), Sound.NOTE_BASS, 100, 1);
+								player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BASS, 100, 1);
 								player.sendMessage(Main.PREFIX + ChatColor.GRAY + "Das Spiel startet in " + ChatColor.GREEN + seconds + ChatColor.GRAY + " Sekunden.");
 							}
 							break;
-							
+
 						case 5:
 							Bukkit.broadcastMessage(Main.PREFIX + ChatColor.GRAY + "Das Spiel startet in " + ChatColor.GREEN + seconds + ChatColor.GRAY + " Sekunden.");
 							for(Player player : Bukkit.getOnlinePlayers())
 							{
-								player.playSound(player.getLocation(), Sound.NOTE_BASS, 100, 1);
+								player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BASS, 100, 1);
+								player.sendTitle(ChatColor.DARK_RED + "5", null, 20, 20, 20);
 							}
 							break;
-							
+						case 4:
+							for(Player player : Bukkit.getOnlinePlayers())
+							{
+								player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BASS, 100, 1);
+								player.sendTitle(ChatColor.RED + "4", null, 20, 20, 20);
+								player.sendMessage(Main.PREFIX + ChatColor.GRAY + "Das Spiel startet in " + ChatColor.GREEN + seconds + ChatColor.GRAY + " Sekunden.");
+							}
+							break;
+						case 3:
+							for(Player player : Bukkit.getOnlinePlayers())
+							{
+								player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BASS, 100, 1);
+								player.sendTitle(ChatColor.GOLD + "3", null, 20, 20, 20);
+								player.sendMessage(Main.PREFIX + ChatColor.GRAY + "Das Spiel startet in " + ChatColor.GREEN + seconds + ChatColor.GRAY + " Sekunden.");
+							}
+							break;
+						case 2:
+							for(Player player : Bukkit.getOnlinePlayers())
+							{
+								player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BASS, 100, 1);
+								player.sendTitle(ChatColor.YELLOW + "2", null, 20, 20, 20);
+								player.sendMessage(Main.PREFIX + ChatColor.GRAY + "Das Spiel startet in " + ChatColor.GREEN + seconds + ChatColor.GRAY + " Sekunden.");
+								player.setExp(player.getExp() + (float)1/COUNTDOWN_TIME);
+							}
+							break;
 						case 1:
 							Bukkit.broadcastMessage(Main.PREFIX + "§7Das Spiel startet in §aeiner Sekunde§7.");
 							for(Player player : Bukkit.getOnlinePlayers())
 							{
-								player.playSound(player.getLocation(), Sound.NOTE_BASS, 100, 1);
+								player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BASS, 100, 1);
+								player.sendTitle(ChatColor.GREEN + "1", null, 20, 20, 20);
 								player.setExp(player.getExp() + (float)1/COUNTDOWN_TIME);
 							}
 							break;
-							
 						case 0:
 							plugin.getGameStateManager().setGameState(GameStates.INGAME_STATE);
+							removeLobby();
 							for(Player player: Bukkit.getOnlinePlayers())
 							{
-								player.playSound(player.getLocation(), Sound.NOTE_BASS, 100, 2);
+								player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BASS, 100, 2);
+								player.sendTitle(ChatColor.DARK_GREEN + "Go!", null, 20, 20, 20);
 								player.setLevel(0);
 								player.setExp(0);
-								stop();
 							}
-							break;							
+							stop();
+							break;
 						default:
 							break;
 						}
@@ -108,7 +133,19 @@ public class LobbyCountdown extends Countdown
 		}
 		
 	}
-	
+
+	private void removeLobby(){
+		Location spawnLoc = Bukkit.getWorld("world").getSpawnLocation();
+		Location startLoc = new Location(spawnLoc.getWorld(), spawnLoc.getBlockX() + 7, spawnLoc.getBlockY() + 49, spawnLoc.getBlockZ() - 7);
+		for (int y = 0; y <= 6; y++){
+			for (int x = 0; x <= 14; x++){
+				for (int z = 0; z <= 14; z++){
+					new Location(startLoc.getWorld(), startLoc.getBlockX() - x, startLoc.getBlockY() + y, startLoc.getBlockZ() + z).getBlock().setType(Material.AIR);
+				}
+			}
+		}
+	}
+
 	public void startIdle() 
 	{
 		isIdeling = true;
@@ -148,4 +185,6 @@ public class LobbyCountdown extends Countdown
 	{
 		return isRunning;
 	}
+
+	public boolean isIdeling() { return isIdeling; }
 }

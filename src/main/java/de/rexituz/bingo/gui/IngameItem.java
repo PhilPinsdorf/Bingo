@@ -21,7 +21,7 @@ public class IngameItem implements Listener {
     String itemName = ChatColor.GREEN + "Bingo " + ChatColor.GRAY + "(Rechtsklick)";
 
     public ItemStack getIngameItem() {
-        return new ItemBuilder().getItem(itemName, itemMaterial, 1, false, new ArrayList<String>(Arrays.asList("")), true, false, 0);
+        return new ItemBuilder().getItem(itemName, itemMaterial, 1, false, new ArrayList<String>(Arrays.asList("")), true, false);
     }
 
     @EventHandler

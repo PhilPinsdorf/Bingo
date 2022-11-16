@@ -16,6 +16,7 @@ public class GameStateManager
 	
 	public void setGameState(int gameStateID) 
 	{
+		if(currentGameState == gameStates[gameStateID]) return;
 		if(currentGameState != null)
 			currentGameState.stop();
 		currentGameState = gameStates[gameStateID];

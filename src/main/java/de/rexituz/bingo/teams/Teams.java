@@ -16,16 +16,16 @@ public class Teams {
     ChatColor color;
     ArrayList<String> players;
     TeamsDelivery teamsDelivery;
-    DyeColor dyeColor;
+    Material material;
     Inventory inv;
     final int MAX_PLAYER = 2;
 
-    public Teams(String name, ChatColor color, ArrayList<String> players, TeamsDelivery teamsDelivery, DyeColor dyeColor, Inventory inv){
+    public Teams(String name, ChatColor color, ArrayList<String> players, TeamsDelivery teamsDelivery, Material material, Inventory inv){
         this.name = name;
         this.color = color;
         this.players = players;
         this.teamsDelivery = teamsDelivery;
-        this.dyeColor = dyeColor;
+        this.material = material;
         this.inv = inv;
     }
 
@@ -57,7 +57,7 @@ public class Teams {
         for (int i = 0; i < getPlayer().size(); i++) {
             listOne.set(i + 1, getColor() + "» " + getPlayer().get(i));
         }
-        return new ItemBuilder().getItem(color + "Team " + name, Material.WOOL, 1, true, listOne, false, true, dyeColor.getData());
+        return new ItemBuilder().getItem(color + "Team " + name, material, 1, true, listOne, false, true);
     }
 
     public int getMAX_PLAYER() {

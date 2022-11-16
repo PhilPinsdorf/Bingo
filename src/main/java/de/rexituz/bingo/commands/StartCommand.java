@@ -11,7 +11,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class StartCommand implements CommandExecutor {
-	private final Main plugin = Main.getPlugin();
+	private Main plugin = Main.getPlugin();
 	private static final int START_SECONDS = 5;
 	
 	@Override
@@ -28,7 +28,6 @@ public class StartCommand implements CommandExecutor {
 						if (plugin.getGameStateManager().getCurrentGameState() instanceof LobbyState) {
 							if (plugin.getLobbyCountdown().getSeconds() > START_SECONDS) {
 								plugin.getLobbyCountdown().start();
-								plugin.getLobbyCountdown().
 								plugin.getLobbyCountdown().setSeconds(START_SECONDS);
 								for (Player target : Bukkit.getOnlinePlayers())
 									target.sendMessage(Main.PREFIX + ChatColor.GREEN + "Der Spieler " + ChatColor.GOLD + player.getName() + ChatColor.GREEN + " hat einen Force-Start benutzt!");
@@ -46,7 +45,7 @@ public class StartCommand implements CommandExecutor {
 					player.sendMessage(Main.PREFIX + ChatColor.RED + "Bitte benutze " + ChatColor.GOLD + "/start" + ChatColor.RED + "!");
 				}
 			} else {
-				player.sendMessage(ChatColor.RED + "Du hast keine Berechtigung dazu!");
+				player.sendMessage(Main.PREFIX + ChatColor.RED + "Du hast keine Berechtigung dazu!");
 			}
 			
 		}

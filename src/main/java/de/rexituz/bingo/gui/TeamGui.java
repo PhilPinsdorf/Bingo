@@ -22,7 +22,7 @@ import java.util.Objects;
 
 public class TeamGui implements Listener {
     Main plugin = Main.getPlugin();
-    private final Material TEAM_GUI_MATERIAL = Material.BED;
+    private final Material TEAM_GUI_MATERIAL = Material.RED_BED;
     private final String TEAM_GUI_NAME = ChatColor.GOLD + "Team Auswahl";
     private final Inventory inventory = Bukkit.createInventory(null, 9, TEAM_GUI_NAME);
 
@@ -51,7 +51,7 @@ public class TeamGui implements Listener {
         if(!(event.getWhoClicked() instanceof Player)) return;
         if(event.getClickedInventory() == null) return;
         if(event.getCurrentItem() == null) return;
-        if(!event.getClickedInventory().getName().equals(TEAM_GUI_NAME)) return;
+        if(!event.getView().getTitle().equals(TEAM_GUI_NAME)) return;
 
         event.setCancelled(true);
         Player player = (Player) event.getWhoClicked();
@@ -108,6 +108,6 @@ public class TeamGui implements Listener {
 
     public ItemStack getTeamItem()
     {
-        return new ItemBuilder().getItem(TEAM_GUI_NAME, TEAM_GUI_MATERIAL, 1, false, new ArrayList<String>(Arrays.asList("")), true, false, 0);
+        return new ItemBuilder().getItem(TEAM_GUI_NAME, TEAM_GUI_MATERIAL, 1, false, new ArrayList<String>(Arrays.asList("")), true, false);
     }
 }
